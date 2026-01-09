@@ -1,0 +1,9 @@
+﻿@if (Context.Request.Path.StartsWithSegments("/Admin"))
+{
+    Layout = "~/Views/Admin/_AdminLayout.cshtml"; // Admin layout
+}
+else
+{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Client-side layout
+}
+

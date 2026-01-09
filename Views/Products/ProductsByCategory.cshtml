@@ -1,0 +1,55 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Products";
+}
+
+<section class="container mt-5">
+    <h2 class="text-center mb-4">Products in @ViewBag.CategoryName</h2>
+    <div class="row">
+        @if Model.A
+        {
+            foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" />
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">₹@product.Price</p>
+                            <a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@product.Id" class="btn btn-success">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center">No products found in this subcategory.</p>
+        }
+    </div>
+</section>
+
+<!---
+List<CoffeeShop.Models.Product>
+
+<h2>Products in @ViewBag.CategoryName</h2>
+
+@if (!Model.Any())
+{
+    <p>No products available in this category.</p>
+}
+else
+{
+    <div class="product-list">
+        @foreach (var product in Model)
+        {
+            <div class="product-card">
+                <h4>@product.Name</h4>
+                <img src="@product.ImageUrl" alt="@product.Name" />
+                <p>@product.Price ₹</p>
+                <p>@product.Detail</p>
+            </div>
+        }
+    </div>
+}
+-->

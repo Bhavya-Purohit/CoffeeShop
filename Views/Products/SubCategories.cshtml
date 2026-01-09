@@ -1,0 +1,31 @@
+﻿@model Category
+
+<section class="container mt-5">
+    <h2 class="text-center mb-4">Subcategories of @Model.Name</h2>
+
+    <div class="row">
+        @if (Model.SubCategories != null && Model.SubCategories.Any())
+        {
+            @foreach (var sub in Model.SubCategories)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <img src="@sub.ImageUrl" class="card-img-top" alt="@sub.Name" />
+                        <div class="card-body text-center">
+                            <h5 class="card-title">@sub.Name</h5>
+                            <a asp-controller="ProductsByCategory" asp-action="ProductsByCategory" asp-route-id="@sub.Id">
+                                @sub.Name
+                            </a>
+
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-center">No subcategories found.</p>
+        }
+    </div>
+</section>

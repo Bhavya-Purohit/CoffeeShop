@@ -1,0 +1,73 @@
+﻿@model List<CoffeeShop.Models.Order>
+
+@{
+    ViewData["Title"] = "Manage Orders";
+}
+
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h1 class="display-5 font-weight-bold text-uppercase bg-primary text-white p-1 rounded shadow">Manage Orders</h1>
+    </div>
+    <br />
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Order Total</th>
+                    <th>Order Placed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+           
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.FirstName @order.LastName</td>
+                        <td>@order.Phone</td>
+                        <td>@order.Address</td>
+                        <td>@order.OrderTotal.ToString("C")</td>
+
+                        <td>@order.OrderPlaced.ToString("dd / MM / yyyy")</td>
+
+                        <td>
+
+                            <div class="d-flex align-items-center">
+                                <a href="@Url.Action("ViewOrder", "Admin", new { id = order.Id })" title="View">
+                                    <img src="https://static.vecteezy.com/system/resources/previews/014/551/056/original/eye-icon-simple-flat-eye-design-vision-care-concept-wear-glasses-for-a-clear-vision-png.png" alt="View" style="width: 40px; height: 40px; margin-right:10px;" />
+                                </a>
+
+                                <form asp-action="DeleteOrder" asp-route-id="@order.Id" method="post" style="display:inline;">
+                                    <a href="#" onclick="if(confirm('Are you sure you want to delete this order?')) { this.closest('form').submit(); } return false;" title="Delete">
+                                        <img src="https://th.bing.com/th/id/OIP.n3ahyM7JKnUecto2vf55yQAAAA?rs=1&pid=ImgDetMain" alt="Delete" style="width: 20px; height: 20px;" />
+                                    </a>
+                                </form>
+
+                       
+
+                       
+
+                               
+
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-right">
+            <a href="/Admin" class="btn btn-primary">Back</a>
+        <!-- Button to trigger order status update -->
+        
+
+        </div>
+    </div>
+</div>
+

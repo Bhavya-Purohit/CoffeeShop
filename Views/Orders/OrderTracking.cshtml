@@ -1,0 +1,203 @@
+﻿@model CoffeeShop.Models.Order
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order</title>
+
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light background for better contrast */
+        }
+
+        .container {
+            max-width: 600px; /* Limit maximum width of the container */
+            margin: 0 auto; /* Center container */
+            padding-top: 20px; /* Space from the top */
+        }
+
+        .card {
+            margin-top: 20px; /* Space between navbar and card */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+
+        .card-header {
+            background-color: sandybrown; /* Bootstrap primary color */
+            color: white; /* White text color */
+            border-top-left-radius: 10px; /* Match card rounding */
+            border-top-right-radius: 10px; /* Match card rounding */
+        }
+
+        h2 {
+            color: #333; /* Dark color for headings */
+        }
+
+        .total-price {
+            font-size: 1.5em; /* Larger font size for total price */
+            font-weight: bold; /* Bold text */
+            color: #28a745; /* Green color for total price */
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Primary color */
+            border-color: #007bff; /* Border color */
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3; /* Darker on hover */
+                border-color: #004085; /* Darker border on hover */
+            }
+
+        hr {
+            border-top: 2px solid #007bff; /* Blue color for horizontal rule */
+        }
+
+        /* Align buttons horizontally */
+        .button-group {
+            display: flex;
+            justify-content: space-between; /* Space between buttons */
+            margin-top: 20px; /* Space from the elements above */
+        }
+
+        .quantity-controls {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .quantity-btn {
+           
+            color: black;
+            border: none;
+            padding: 2px 6px;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+            .quantity-btn:disabled {
+                background-color: #cccccc;
+                cursor: not-allowed;
+            }
+    </style>
+</head>
+<body>
+    <br />
+    <br />
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center">Order Summary</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <strong>Name:</strong> @Model.FirstName @Model.LastName
+                    </div>
+                    <div class="col-sm-6">
+                        <strong>Phone:</strong> @Model.Phone
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <strong>Address:</strong> @Model.Address
+                    </div>
+                </div>
+                <hr />
+                <h5>Order Details</h5>
+               
+               <div id="orderDetails">
+                    @foreach (var item in Model.OrderDetails)
+                    {
+                        <div class="item-row" data-product-id="@item.ProductId">
+                            <div>
+                                @item.Quantity x @item.Product.Name
+                            </div>
+                            
+
+                            
+                        </div>
+                    }
+                </div>
+
+                <!----<div id="orderDetails">
+                    @if (Model.OrderDetails != null && Model.OrderDetails.Any())
+                    {
+                        @foreach (var item in Model.OrderDetails)
+                        {
+                            <div class="item-row" data-product-id="@item.ProductId">
+                                <div>
+                                    @item.Quantity x @(item.Product?.Name ?? "Unknown Product")
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>No order details available.</p>
+                    }
+                </div>-->
+
+
+
+                <hr />
+                <h5>Payment Options</h5>
+
+                <form method="post" asp-action="InitiateUPIPayment" asp-route-orderId="@Model.Id" id="paymentForm">
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="paymentMethod" value="CashOnDelivery" required onchange="handlePaymentChoice()" />
+                        <label class="form-check-label">Cash on Delivery</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" class="form-check-input" name="paymentMethod" value="UPI" required onchange="handlePaymentChoice()" />
+                        <label class="form-check-label">Pay Online (UPI)</label>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Proceed</button>
+                        <button type="button" onclick="goBack()" class="btn btn-secondary">Back</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+
+
+        function updateQuantity(productId, change) {
+            const quantitySpan = document.getElementById(`quantity-${productId}`);
+            const priceSpan = document.getElementById(`price-${productId}`);
+
+            let currentQuantity = parseInt(quantitySpan.textContent);
+            if (currentQuantity + change >= 1) {
+                currentQuantity += change;
+                quantitySpan.textContent = currentQuantity;
+
+
+                const pricePerUnit = parseFloat(priceSpan.textContent) / (currentQuantity - change);
+                priceSpan.textContent = (pricePerUnit * currentQuantity).toFixed(2);
+            }
+        }
+
+        function goBack() {
+            // Redirect to the ShippingAddress page
+            window.location.href = '@Url.Action("Checkout", "Orders")'; // Update with your action
+        }
+
+        function addItem(orderId) {
+            // Redirect to the Shop page
+            window.location.href = '@Url.Action("Shop", "Products")';
+        }
+    </script>
+</body>
+</html>
+
+
+

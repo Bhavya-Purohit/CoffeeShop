@@ -1,0 +1,43 @@
+﻿@model IEnumerable<CoffeeShop.Models.Category>
+
+
+    
+@{
+    ViewData["Title"] = "Browse Categories";
+}
+
+<h2>Browse Categories</h2>
+
+<ul class="list-group">
+    @foreach (var category in Model)
+    {
+        <li class="list-group-item">
+            <a asp-action="ProductsByCategory" asp-route-id="@category.Id">@category.Name</a>
+        </li>
+    }
+</ul>
+
+<!----
+<h2>Categories and SubCategories</h2>
+
+@foreach (var category in Model)
+{
+    <div>
+        <h3>@category.Name</h3>
+        
+        @if (category.SubCategories != null && category.SubCategories.Any())
+        {
+            <ul>
+                @foreach (var sub in category.SubCategories)
+                {
+                    <li>@sub.Name</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No subcategories available for this category.</p>
+        }
+    </div>
+}
+-->

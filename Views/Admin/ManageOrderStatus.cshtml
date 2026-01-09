@@ -1,0 +1,20 @@
+﻿@model CoffeeShop.Models.Order
+
+<h2>Update Order Status</h2>
+
+<form asp-action="UpdateOrderStatus" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <label>Status</label>
+    <select asp-for="OrderStatus" class="form-control">
+        <option value="In Process">In Process</option>
+        <option value="Shipped">Shipped</option>
+        <option value="Delivered">Delivered</option>
+        <option value="Cancelled">Cancelled</option>
+    </select>
+
+    <label>Tracking Number (optional)</label>
+    <input type="text" asp-for="TrackingNumber" class="form-control" />
+
+    <button type="submit" class="btn btn-primary mt-2">Update Status</button>
+</form>
